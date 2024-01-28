@@ -9,7 +9,8 @@ import tkinter as tk
 from tkinter import ttk
 
 load_dotenv()
-TOKEN=os.getenv("TOKEN")
+KB_SITE=os.getenv("KB_SITE")
+KB_TOKEN=os.getenv("KB_TOKEN")
 
 _debug = 0
 _method = "gp"
@@ -18,10 +19,10 @@ _project_id = -1
 
 class APIConnector:
     def __init__(self):
-        self.conn = http.client.HTTPSConnection("earnhardt-kban.duckdns.org")
+        self.conn = http.client.HTTPSConnection(KB_SITE)
         self.headers = {
             "Content-Type": "application/json",
-            "Authorization": "Basic " + TOKEN,
+            "Authorization": "Basic " + KB_TOKEN,
         }
 
     def callback(self):
