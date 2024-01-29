@@ -8,9 +8,23 @@ import logging
 import tkinter as tk
 from tkinter import ttk
 
-load_dotenv()
-KB_SITE=os.getenv("KB_SITE")
-KB_TOKEN=os.getenv("KB_TOKEN")
+# Check if .env file exists in same folder!
+if os.path.isfile(".env"):
+    load_dotenv()
+    KB_SITE=os.getenv("KB_SITE")
+    KB_TOKEN=os.getenv("KB_TOKEN")
+else:
+    print("ERROR: MISSING REQUIRED '.env' file")
+    print("The .env file is missing, please add it to the same folder as this script")
+    sys.exit(1)
+
+# Check of KB_SITE and KB_TOKEN veraibles have values
+if KB_SITE == "" or KB_TOKEN == "":
+    print("ERROR: MISSING REQUIRED ENVIRONMENT VARIABLES FROM .env FILE")
+    print("Please add the following variables to the.env file")
+    print("KB_SITE=https://<kanboard-site>")
+    print("KB_TOKEN=<kanboard-token>")
+    sys.exit(1)
 
 _debug = 0
 _method = "gp"
