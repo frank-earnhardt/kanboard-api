@@ -19,11 +19,13 @@ else:
     sys.exit(1)
 
 # Check of KB_SITE and KB_TOKEN veraibles have values
-if KB_SITE == "" or KB_TOKEN == "":
+if KB_SITE == "" or KB_SITE == None or KB_TOKEN == "" or KB_TOKEN == None:
+    print("************************************************************")
     print("ERROR: MISSING REQUIRED ENVIRONMENT VARIABLES FROM .env FILE")
-    print("Please add the following variables to the.env file")
-    print("KB_SITE=https://<kanboard-site>")
-    print("KB_TOKEN=<kanboard-token>")
+    print("************************************************************")
+    print("  Please add the following variables to the.env file")
+    print("  -- KB_SITE=https://<kanboard-site>")
+    print("  -- KB_TOKEN=<kanboard-token>")
     sys.exit(1)
 
 _debug = 0
