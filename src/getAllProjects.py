@@ -9,12 +9,14 @@ import tkinter as tk
 from tkinter import ttk
 
 # Check if .env file exists in same folder!
-if os.path.isfile(".env"):
+wdir = os.path.dirname(os.path.realpath(__file__))
+envFile = wdir + "\\.env"
+if os.path.isfile(envFile):
     load_dotenv()
     KB_SITE=os.getenv("KB_SITE")
     KB_TOKEN=os.getenv("KB_TOKEN")
 else:
-    print("ERROR: MISSING REQUIRED '.env' file")
+    print(f"ERROR: MISSING REQUIRED '{envFile}' file")
     print("The .env file is missing, please add it to the same folder as this script")
     sys.exit(1)
 
@@ -29,7 +31,7 @@ if KB_SITE == "" or KB_SITE == None or KB_TOKEN == "" or KB_TOKEN == None:
     sys.exit(1)
 
 _debug = 0
-_method = "gp"
+_method = ""
 _project_id = -1
 
 
@@ -135,9 +137,7 @@ def callback(event):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Kan Board API Client")
-    parser.add_argument(
-        "-d", "--debug", default=0, help="Enable debug output", type=int
-    )
+    parser.add_argument("-d", "--debug", default=0, help="Enable debug output", type=int)
     parser.add_argument("-m", "--method", default="gp", help="API Method", type=str)
     parser.add_argument("-p", "--project_id", help="Project ID", type=int)
     parser.add_argument("-n", "--name", help="Project Name", type=str)
