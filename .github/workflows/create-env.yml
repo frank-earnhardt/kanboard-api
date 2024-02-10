@@ -1,0 +1,36 @@
+name: Create .env File
+
+on:
+  push:
+    branches:
+      - '*' # '*' will trigger on all branches; otherwise, enter default branch i.e. 'main'
+
+jobs:
+  create-env:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create .env file
+        run: |
+          if [ ! -f .env ]; then
+            echo "KB_SITE=${{ secrets.KB_SITE }}" > .env
+            echo "KB_TOKEN=${{ secrets.KB_TOKEN }}" >> .env
+            # Add more secrets as needed
+          fi
+
+      - name: Check OS
+        run: |
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            echo "Running on Windows"
+          elif [ "${{ runner.os }}" == "macOS" ]; then
+            echo "Running on macOS"
+          else
+            echo "Running on Linux (Ubuntu)"
+          fi
