@@ -542,12 +542,15 @@ if __name__ == "__main__":
             input_url = promptForInput("  Enter Company URL (x to exit): ")
             print(f"  Company URL:{input_url}")
             new_category = createCategory(_project_id, input_company)
+            if _debug > 0:
+                print(f"  Category ID:",str(new_category['id']),type(new_category['id']))
             if new_category == False:
                 print(f"Category already exists:",input_company)
                 new_category = getCategoryByName(_project_id, input_company)
-            
-            print(f"  Category ID:",str(new_category['id']))
-            print(f"  Category Name:",new_category['name'])
+            else:
+              print(f"  Category ID:",str(new_category['id']))
+              print(f"  Category Name:",new_category['name'])
+
             tsk = Task(title=input_company,project_id=_project_id,description=input_company,category_id=new_category["id"],tags=["Company"])
             print(tsk)
 

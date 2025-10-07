@@ -56,6 +56,27 @@ def getAllProjects(api):
 
     return all_projects
 
+def getAllSwimlanes(api,pid):
+    payload = json.dumps({"jsonrpc": "2.0", "method": "getAllSwimlanes", "id": 509791576, "params": {"project_id": pid}})
+
+    api.conn.request("GET", "/jsonrpc.php", payload, api.headers)
+    res = api.conn.getresponse()
+    data = res.read()
+
+    all_swimlanes = json.loads(data)["result"]
+
+    return all_swimlanes
+
+def changeSwimlanePosition(api,pid,slid,pos):
+    payload = json.dumps({"jsonrpc": "2.0", "method": "changeSwimlanePosition", "id": 99275573, "params": {"project_id": pid,"swimlane_id": slid,"position": pos}})
+
+    api.conn.request("GET", "/jsonrpc.php", payload, api.headers)
+    res = api.conn.getresponse()
+    data = res.read()
+
+    result = json.loads(data)["result"]
+    print("changeSwimlanePosition", result)
+    return result
 
 def selectAProject(all_projects):
     loop = True
@@ -267,3 +288,32 @@ if __name__ == "__main__":
                 _project_id = selected_project["id"]
             print(f"  Project ID:{_project_id}")
             print(f"  Project Name:{selected_project['name']}")
+            project_swimlanes = getAllSwimlanes(api,_project_id)
+            sorted_swimlanes = sorted(project_swimlanes, key=lambda k: k['name'])
+            new_pos = 0
+            for swimlane in sorted_swimlanes:
+                new_pos = new_pos + 1
+                old_pos = swimlane['position']
+                print(f"  Swimlane:{swimlane['name']} ID:{swimlane['id']} OLD_POS:{old_pos} NEW_POS:{new_pos}")
+                if old_pos != new_pos:
+                    ask_user = input(f"  Move Swimlane:{swimlane['name']} ID:{swimlane['id']} from OLD_POS:{old_pos} to NEW_POS:{new_pos} [y/n]:")  
+                    if ask_user == "y":
+                      result = changeSwimlanePosition(api, _project_id, swimlane['id'], new_pos)
+                    else:
+                      print(f"  Skipping Swimlane:{swimlane['name']} ID:{swimlane['id']} from OLD_POS:{old_pos} to NEW_POS:{new_pos}")
+                else:
+                  print(f"  NO CHANGES NEEDED for Swimlane:{swimlane['name']} ID:{swimlane['id']} from OLD_POS:{old_pos} to NEW_POS:{new_pos}")
+              
+                #print(f"  Swimlane Name:{swimlane['name']}")
+                #print(f"  Swimlane Position:{swimlane['position']}")
+
+            # for position, swimlane in enumerate(sorted_swimlanes, start=1):
+            #     result = changeSwimlanePosition(api, _project_id, swimlane['id'], position)
+            #     print(f"  Swimlane:{swimlane['name']} ID:{swimlane['id']} Position:{position} Result:{result}")
+
+            # if (project_swimlanes is not None) and (len(project_swimlanes) > 0):
+            #     for swimlane in project_swimlanes:
+            #         print(f"  Swimlane:{swimlane['name']} ID:{swimlane['id']}")
+            #         #print(f"  Swimlane Name:{swimlane['name']}")
+            #         #print(f"  Swimlane Position:{swimlane['position']}")
+            #         #print(f"  Swimlane is active:{swimlane['is_active']}")
